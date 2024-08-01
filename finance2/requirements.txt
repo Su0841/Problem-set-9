@@ -1,0 +1,93 @@
+cs50
+Flask
+Flask-Session
+pytz
+requests
+
+
+"""
+CREATE TABLE history(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_id  INTEGER NOT NULL,
+    symbol   TEXT NOT NULL,
+    shares   TEXT NOT NULL,
+    price    REAL NOT NULL,
+    date     TEXT NOT NULL,
+    time     TEXT NOT NULL,
+    FOREIGN KEY (user_id)
+        REFERENCES users (id)
+);
+"""
+
+"""
+CREATE TABLE ownership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_id  INTEGER NOT NULL,
+    symbol   TEXT NOT NULL,
+    shares   INTEGER NOT NULL,
+    FOREIGN KEY (user_id)
+        REFERENCES users (id)
+    UNIQUE(user_id, symbol)
+);
+"""
+
+"""
+RuntimeError: unsupported value: {'id': 3}
+"""
+
+"""
+        # add that amount of shares of that symbol to the user portfolio
+        try:
+            # if user has never bought that stock before
+            db.execute("INSERT INTO portfolio (user_id, symbol, shares) VALUES (? , ?, ?)", session["user_id"], stock["symbol"], int(request.form.get("shares")))
+
+        except:
+            # if the user has bought that stock before
+            # current shares of that user stock
+            current_shares = db.execute("SELECT shares FROM portfolio WHERE user_id = ? AND symbol = ?", session["user_id"], stock["symbol"])
+
+            db.execute("UPDATE portfolio SET shares = ? WHERE user_id = ? and symbol = ?", current_shares + int(request.form.get("shares")), session["user_id"], stock["symbol"])
+"""
+
+"""
+SELECT symbol, shares, cash
+FROM users
+JOIN portfolio ON users.id = portfolio.user_id
+WHERE users.id = 6;
+"""
+
+"""
+for x in list_x, y in list_y:
+"""
+
+
+"""
+shares_transacted = "+" + request.form.get("shares")
+
+db.execute("INSERT INTO history (shares) VALUE (?)",
+shares_transacted)
+
+"""
+
+"""
+    stocks = db.execute("SELECT symbol, shares, cash FROM users JOIN portfolio ON users.id = portfolio.user_id WHERE users.id = ?", session["user_id"])
+
+    cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+
+    grand_total = cash
+
+    for stock in stocks:
+        price = lookup(stock["symbol"])["price"]
+
+        keys = ("price", "stock's total")
+        values = (price, stock["shares"] * price)
+
+        for key, value in zip(keys, values):
+            if key == "stock's total":
+                grand_total += value
+
+            stock.update({key: value})
+
+    return render_template("index.html", stocks=stocks, grand_total=grand_total, cash=cash)
+
+"""
